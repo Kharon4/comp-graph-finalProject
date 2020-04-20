@@ -1,37 +1,36 @@
-#include <GLFW/glfw3.h>
+#include <iostream>
 
-int main(void)
-{
-    GLFWwindow* window;
+#define math3D_DeclrationOnly 1
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+#include "win32WindowingSystem.h"
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
+#include "testCase0.h"
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
 
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
-
-    glfwTerminate();
-    return 0;
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow) {
+	enableConsole();
+	int x = 800, y = 600;
+	window w1(hInstance, nCmdShow, L"hello world", x, y);
+	for (int i = 0; i < x * y; ++i) {
+		w1.data[i * 3 + 2] = 255;
+	}
+	w1.draw();
+	camera c;
+	c.xRes = x;
+	c.yRes = y;
+	c.vertex = vec3d(0, -1, 0);
+	c.topLeftCorner = vec3d(-1, 0, 1);
+	c.down = vec3d(0, 0, -2);
+	c.right = vec3d(2, 0, 0);
+	initLights();
+	triangle* trs = generateTriangles();
+	collTriangle* cTrs = initMesh(trs, noTrs);
+	render(c, trs, cTrs,noTrs,pL,dL, w1.data);
+	w1.draw();
+	deleteTrs(trs, cTrs, noTrs);
+	system("pause");
+	
+	
+	
+	return 0;
 }
