@@ -4,7 +4,7 @@
 struct triangle {
 	vec3d* pts[3];
 	vec3f reflectivity;
-	vec3f transminivity;
+	vec3f transmitivity;
 	vec3f diffuseRefelctivity;
 	float refractiveIndex;
 };

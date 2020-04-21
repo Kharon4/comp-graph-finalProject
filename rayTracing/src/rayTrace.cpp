@@ -1,7 +1,7 @@
 #include "rayTrace.h"
 
 #define defaultColor vec3f(64, 64, 64)
-#define clearanceFactor 0.001
+#define clearanceFactor 0.01
 
 collTriangle* initMesh(triangle* list, size_t noOfTrinagles) {
 	collTriangle* rVal = nullptr;
@@ -27,7 +27,7 @@ long long int getClosestIntersection(linearMathD::line ray, collTriangle* collTr
 		if (vec3d::dot(collTrs[i].sidePlanes[2].getDr(), collPt - collTrs[i].sidePlanes[2].getPt()) < 0)continue;
 
 		tempDist = vec3d::dot(ray.getDr(), collPt - ray.getPt());
-		if (tempDist < smallestDist || smallestDist < 0) {
+		if ((tempDist < smallestDist && tempDist>0) || smallestDist < 0) {
 			smallestDist = tempDist;
 			closestId = i;
 			if (minCollPt != nullptr)*minCollPt = collPt;
@@ -97,50 +97,35 @@ vec3f rayTrace(linearMathD::line ray, triangle* trs, collTriangle* collTrs, long
 	{
 		linearMathD::line refractedRay;
 		refractedRay.setPT(collPt + ray.getDr() * clearanceFactor);
-		if (vec3d::dot(collTrs[id].collPlane.getDr(), ray.getDr()) < 0) {
-			//calculate initial sin(i)
-			float si = vec3d::dot(collTrs[id].collPlane.getDr(), -ray.getDr()) / (ray.getDr().mag() * collTrs[id].collPlane.getDr().mag());
-			si = sqrt(1 - si * si);
-
-			//calculate sin(r) and cos(r)
-			float sr = si / trs[id].refractiveIndex;
-			if (sr > 1) {
-				std::cout << "error0" << std::endl;
-				system("pasue");
-			}
-			float cr = sqrt(1 - sr * sr);
-			vec3d finalDr = vec3d(0, 0, 0);
-			finalDr += vec3d::normalize(-collTrs[id].collPlane.getDr()) * cr;
-			finalDr += (ray.getDr() - collTrs[id].collPlane.getDr() * vec3d::dot(collTrs[id].collPlane.getDr(), ray.getDr()) / collTrs[id].collPlane.getDr().mag2()) * sr;
-			refractedRay.setDR(finalDr);
+		vec3d normal = vec3d::normalize(collTrs[id].collPlane.getDr());
+		//get dr.n
+		double dot = vec3d::dot(ray.getDr(), normal);
+		double sinr;
+		if (dot >= 0) {
+			sinr = trs[id].refractiveIndex * sqrt(1 - (dot * dot / ray.getDr().mag2()));
 		}
 		else {
-			//calculate initial sin(i)
-			float si = vec3d::dot(-collTrs[id].collPlane.getDr(), ray.getDr()) / (ray.getDr().mag() * collTrs[id].collPlane.getDr().mag());
-			si = sqrt(1 - si * si);
+			sinr = sqrt(1 - (dot * dot / ray.getDr().mag2())) / trs[id].refractiveIndex;
+		}
 
-			//calculate sin(r) and cos(r)
-			float sr = si / trs[id].refractiveIndex;
-			if (sr > 1) {
-				std::cout << "error2" << std::endl;
-				system("pasue");
-			}
-			float cr = sqrt(1 - sr * sr);
-			vec3d finalDr = vec3d(0, 0, 0);
-			finalDr += vec3d::normalize(collTrs[id].collPlane.getDr()) * cr;
-			finalDr += (ray.getDr() - collTrs[id].collPlane.getDr() * vec3d::dot(collTrs[id].collPlane.getDr(), ray.getDr()) / collTrs[id].collPlane.getDr().mag2()) * sr;
-			refractedRay.setDR(finalDr);
+		//check for TIR
+		if (sinr > 1) {
+			refractedRay.setPT(collPt - ray.getDr() * clearanceFactor);
+			refractedRay.setDR(linearMathD::getMirrorImage(collPt + ray.getDr(), collTrs[id].collPlane) - collPt);
+		}else {
+			double cosr = sqrt(1 - sinr * sinr);
+			vec3d DR = vec3d(0, 0, 0);
+			if(dot>0)DR += normal * cosr;
+			else DR -= normal * cosr;
+			DR += vec3d::normalize(ray.getDr() - normal * dot) * sinr;
+			refractedRay.setDR(DR);
 		}
 
 		vec3f refractedColor = rayTrace(refractedRay, trs, collTrs, noTrs, pLights, dLights, iterations - 1);
-		if (refractedColor.x<0 || refractedColor.y < 0|| refractedColor.z < 0){
-			
-			std::cout << refractedColor.x << ",  " << refractedColor.y << ",  " << refractedColor.z << ",  " << std::endl;
-			system("pause");
-		}
-		finalColor.x += refractedColor.x * trs[id].transminivity.x;
-		finalColor.y += refractedColor.y * trs[id].transminivity.y;
-		finalColor.z += refractedColor.z * trs[id].transminivity.z;
+		
+		finalColor.x += (refractedColor.x * trs[id].transmitivity.x);
+		finalColor.y += (refractedColor.y * trs[id].transmitivity.y);
+		finalColor.z += (refractedColor.z * trs[id].transmitivity.z);
 	}
 
 	return finalColor;
