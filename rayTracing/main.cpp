@@ -24,8 +24,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	c.right = vec3d(2, 0, 0);
 	initLights();
 	triangle* trs = generateTriangles();
-	collTriangle* cTrs = initMesh(trs, noTrs);
-	render(c, trs, cTrs,noTrs,pL,dL, w1.data);
+	triangle sphereMesh[triangleNo(10, 10)];
+	vec3d pts[vertexNo(10, 10)];
+	triangle colorVal;
+	colorVal.diffuseRefelctivity = vec3f(255, 0, 0);
+	generateSphere(vec3d(0, 2, -1), 1, 10, 10, pts, sphereMesh,colorVal);
+	collTriangle* cTrs = initMesh(sphereMesh, triangleNo(10, 10));
+	render(c, sphereMesh, cTrs, triangleNo(10, 10),pL,dL, w1.data);
 	w1.draw();
 	deleteTrs(trs, cTrs, noTrs);
 	system("pause");

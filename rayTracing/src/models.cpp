@@ -2,11 +2,20 @@
 #include <filesystem>
 #include "models.hpp"
 
+#define safe 0
+
+#if safe
+#define fopen fopen_s
+#define fscanf fscanf_s
+#endif
+
+
 Model::Model() {
     this->vertices = std::vector<vec3d>();
     this->uvs = std::vector<vec3d>();
     this->normals = std::vector<vec3d>();
 }
+
 
 bool Model::loadObj(std::string directory, std::string fileName) {
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
@@ -15,7 +24,6 @@ bool Model::loadObj(std::string directory, std::string fileName) {
     std::vector<vec3d> temp_normals;
     std::unordered_map<unsigned int, std::string> material_vertex_indices;
     std::string current_material;
-
     std::string filepath = (std::filesystem::path(directory) /  std::filesystem::path(fileName)).string();
     FILE *file = fopen(filepath.c_str(), "rb");
     if (!file) {
