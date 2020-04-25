@@ -1,15 +1,21 @@
 #include "rayTrace.h"
 
 #define defaultColor vec3f(64, 64, 64)
-#define clearanceFactor 0.01
+#define clearanceFactor 0.001
 
-collTriangle* initMesh(triangle* list, size_t noOfTrinagles) {
+collTriangle* initMesh(triangle* list, size_t noOfTriangles) {
 	collTriangle* rVal = nullptr;
-	rVal = new collTriangle[noOfTrinagles];
-	for (size_t i = 0; i < noOfTrinagles; ++i) {
+	rVal = new collTriangle[noOfTriangles];
+	for (size_t i = 0; i < noOfTriangles; ++i) {
 		rVal[i].calc(list[i]);
 	}
 	return rVal;
+}
+
+void initMesh(collTriangle* colTrs, triangle* list, size_t noOfTriangles) {
+	for (size_t i = 0; i < noOfTriangles; ++i) {
+		colTrs[i].calc(list[i]);
+	}
 }
 
 long long int getClosestIntersection(linearMathD::line ray, collTriangle* collTrs,long long noOfTrs,vec3d * minCollPt = nullptr, double * minDist = nullptr) {
@@ -27,7 +33,7 @@ long long int getClosestIntersection(linearMathD::line ray, collTriangle* collTr
 		if (vec3d::dot(collTrs[i].sidePlanes[2].getDr(), collPt - collTrs[i].sidePlanes[2].getPt()) < 0)continue;
 
 		tempDist = vec3d::dot(ray.getDr(), collPt - ray.getPt());
-		if ((tempDist < smallestDist && tempDist>0) || smallestDist < 0) {
+		if (tempDist > 0 && ( tempDist < smallestDist || smallestDist < 0)) {
 			smallestDist = tempDist;
 			closestId = i;
 			if (minCollPt != nullptr)*minCollPt = collPt;
@@ -72,7 +78,7 @@ vec3f rayTrace(linearMathD::line ray, triangle* trs, collTriangle* collTrs, long
 		linearMathD::line lightRay;
 		lightRay.setPT(collPt - ray.getDr() * clearanceFactor);
 		lightRay.setDR(-dLights[i].dir);
-		double factor = vec3d::dot(lightRay.getDr(), collTrs[id].collPlane.getDr());
+		double factor = vec3d::dot(-dLights[i].dir, collTrs[id].collPlane.getDr());
 		if (factor<= 0)continue;
 		factor /= lightRay.getDr().mag() * collTrs[id].collPlane.getDr().mag();
 		if (getClosestIntersection(lightRay, collTrs, noTrs) >= 0)continue;
@@ -155,6 +161,7 @@ void render(camera c, triangle* trs, collTriangle* collTrs, long long noTrs, con
 			if (col.y > max)max = col.y;
 			if (col.z > max)max = col.z;
 			colorData[x + y * c.xRes] = col;
+			convertToByteColor(0, 255, colorData[x+y*c.xRes], dataOut +(x + y * c.xRes) * 3);
 		}
 	}
 	long int finalCount = c.xRes * c.yRes;

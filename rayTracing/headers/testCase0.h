@@ -1,13 +1,12 @@
 #pragma once
 #include "rayTrace.h"
-#define noTrs 4
 
 vector<pointLight> pL;
 vector<directionalLight> dL;
 #define PI 3.14159
 
-#define vertexNo(arcRes , noArcs) (arcRes-2)*noArcs + 2
-#define triangleNo(arcRes , noArcs) (arcRes-3)*noArcs*2 + 2*noArcs
+#define vertexNo(arcRes , noArcs) ((arcRes-2)*noArcs + 2)
+#define triangleNo(arcRes , noArcs) ((arcRes-3)*noArcs*2 + 2*noArcs)
 
 
 void generateSphere(vec3d center, double rad, unsigned char halfArcRes, unsigned char halfArcs, vec3d* OUTpts, triangle* OUTmesh,triangle shadingProperties) {
@@ -91,57 +90,95 @@ void generateSphere(vec3d center, double rad, unsigned char halfArcRes, unsigned
 
 }
 
+
+//scene specific
+
+#define defaultSphereNoArcs 25
+#define defaultSphereArcRez 25
+
 void initLights() {
-	pointLight p;
-	p.color = vec3f(0.25, 0.25, 0.25);
-	p.pos = vec3d(0, 1.25, -0.5);
-	pL.push_back(p);
+	//global dir light
+	directionalLight dl;
+	dl.color = vec3f(0.75, 0.75, 0.75);
+	dl.dir = vec3d(0, 1, 0);
+	//dL.push_back(dl);
+
+	//point light
+	pointLight pl;
+	pl.color = vec3f(100, 0, 0);
+	pl.pos = vec3d(0, 4, -2);
+	pL.push_back(pl);
+	pl.color = vec3f(0, 100, 0);
+	pl.pos = vec3d(-3 * cos(PI / 6), 4, 3 * sin(PI / 6));
+	pL.push_back(pl);
+	pl.color = vec3f(0, 0, 100);
+	pl.pos = vec3d(3 * cos(PI / 6), 4, 3 * sin(PI / 6));
+	pL.push_back(pl);
 }
 
-triangle* generateTriangles() {
-	triangle* rval = new triangle[noTrs];
-	rval[0].diffuseRefelctivity = vec3f(200, 200, 200);
-	//rval[0].reflectivity = vec3f(0.1, 0.1, 0.1);
-	rval[0].transmitivity = vec3f(0.1, 0.1, 0.1);
-	rval[0].refractiveIndex = 1.5;
-	rval[0].pts[0] = new vec3d(-1, 1, -1);
-	rval[0].pts[1] = new vec3d(1, 1, -1);
-	rval[0].pts[2] = new vec3d(1, 5, -1);
-	
-	rval[1].diffuseRefelctivity = vec3f(0, 0, 0);
-	rval[1].reflectivity = vec3f(0.5, 0.5, 0.5);
-	rval[1].transmitivity = vec3f(0, 0, 0);
-	rval[1].refractiveIndex = 1.2;
-	rval[1].pts[0] = new vec3d(-1, 1, -1);
-	rval[1].pts[2] = new vec3d(-1, 5, -1);
-	rval[1].pts[1] = new vec3d(1, 5, -1);
-	
-	rval[2].diffuseRefelctivity = vec3f(100, 0, 0);
-	rval[2].reflectivity = vec3f(0.5, 0.5, 0.5);
-	rval[2].transmitivity = vec3f(0, 0, 0);
-	rval[2].refractiveIndex = 1;
-	rval[2].pts[0] = new vec3d(-1, 5, -1);
-	rval[2].pts[1] = new vec3d(1, 5, -1);
-	rval[2].pts[2] = new vec3d(1, 5, 5);
-	
-	rval[3].diffuseRefelctivity = vec3f(0, 50, 0);
-	rval[3].reflectivity = vec3f(0, 0, 0);
-	rval[3].transmitivity = vec3f(0.75, 1, 0.75);
-	rval[3].refractiveIndex = 01.5;
-	rval[3].pts[0] = new vec3d(0, 1, -1);
-	rval[3].pts[1] = new vec3d(1, 1, -1);
-	rval[3].pts[2] = new vec3d(0, 1, 1);
+unsigned int getNoVertices() {
+	unsigned int rVal = 0;
+	//base plane
+	rVal += 4;
 
-	return rval;
+	//sphere
+	rVal += 3*vertexNo(defaultSphereArcRez, defaultSphereNoArcs);
+	return rVal;
 }
 
+unsigned int getNoFaces() {
+	unsigned int rVal = 0;
+	//base plane
+	rVal += 2;
 
-void deleteTrs(triangle* trs, collTriangle* cTrs, long long no = noTrs) {
-	delete[] cTrs;
-	for (long long i = 0; i < no; ++i) {
-		delete trs[i].pts[0];
-		delete trs[i].pts[1];
-		delete trs[i].pts[2];
+	//sphere
+	rVal += 3 * triangleNo(defaultSphereArcRez, defaultSphereNoArcs);
+	return rVal;
+}
+
+void generateScene(triangle* trs , vec3d * pts) {
+
+
+	//generate basePlane
+	{	
+		double halfSize = 10;
+		pts[0] = vec3d(-halfSize, 7, -halfSize);
+		pts[1] = vec3d(halfSize, 7, -halfSize);
+		pts[2] = vec3d(halfSize, 7 , halfSize);
+		pts[3] = vec3d(-halfSize, 7 , halfSize);
 	}
-	delete[] trs;
+	{
+		triangle basePlaneShade;
+		basePlaneShade.diffuseRefelctivity = vec3f(70, 70, 70);
+		trs[0] = basePlaneShade;
+		trs[1] = basePlaneShade;
+	}
+
+	trs[0].pts[0] = pts;
+	trs[0].pts[1] = pts + 1;
+	trs[0].pts[2] = pts + 2;
+
+
+	trs[1].pts[0] = pts;
+	trs[1].pts[1] = pts + 2;
+	trs[1].pts[2] = pts + 3;
+
+	trs += 2;
+	pts += 4;
+
+	//generate sphere
+	triangle sphereColorData;
+	sphereColorData.diffuseRefelctivity = vec3f(100, 100, 100);
+	//sphereColorData.reflectivity = vec3f(1, 1, 1);
+	//sphereColorData.transmitivity = vec3f(1,1,1);
+	//sphereColorData.refractiveIndex = 0.8;
+	generateSphere(vec3d(0, 6, 3), 1, defaultSphereArcRez, defaultSphereNoArcs, pts, trs, sphereColorData);
+	pts += vertexNo(defaultSphereArcRez, defaultSphereNoArcs);
+	trs += triangleNo(defaultSphereArcRez, defaultSphereNoArcs);
+	generateSphere(vec3d(3 * cos(PI / 6), 6, 3 * sin(-PI / 6)), 1, defaultSphereArcRez, defaultSphereNoArcs, pts, trs, sphereColorData);
+	pts += vertexNo(defaultSphereArcRez, defaultSphereNoArcs);
+	trs += triangleNo(defaultSphereArcRez, defaultSphereNoArcs);
+	generateSphere(vec3d(-3 * cos(PI / 6), 6, 3 * sin(-PI / 6)), 1, defaultSphereArcRez, defaultSphereNoArcs, pts, trs, sphereColorData);
+
 }
+
