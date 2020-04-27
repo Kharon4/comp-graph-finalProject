@@ -127,16 +127,7 @@ void generateScene(triangle* trs, vec3d* pts) {
 	triangle sphereColorData;
 	sphereColorData.diffuseRefelctivity = vec3f(0, 0, 200);
 	sphereColorData.reflectivity = vec3f(1, 1, 1);
-	//sphereColorData.reflectivity = vec3f(1, 1, 1);
-	//sphereColorData.transmitivity = vec3f(1,1,1);
-	//sphereColorData.refractiveIndex = 0.8;
 	generateSphere(vec3d(0, 4, -0.75), 0.75, defaultSphereArcRez, defaultSphereNoArcs, pts, trs, sphereColorData);
-	//pts += vertexNo(defaultSphereArcRez, defaultSphereNoArcs);
-	//trs += triangleNo(defaultSphereArcRez, defaultSphereNoArcs);
-	//generateSphere(vec3d(3 * cos(PI / 6), 6, 3 * sin(-PI / 6)), 1, defaultSphereArcRez, defaultSphereNoArcs, pts, trs, sphereColorData);
-	//pts += vertexNo(defaultSphereArcRez, defaultSphereNoArcs);
-	//trs += triangleNo(defaultSphereArcRez, defaultSphereNoArcs);
-	//generateSphere(vec3d(-3 * cos(PI / 6), 6, 3 * sin(-PI / 6)), 1, defaultSphereArcRez, defaultSphereNoArcs, pts, trs, sphereColorData);
-
+	
 }
 

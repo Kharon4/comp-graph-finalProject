@@ -4,7 +4,7 @@
 
 #include "win32WindowingSystem.h"
 
-#include "testCase1.h"
+#include "testCase2.h"
 
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow) {

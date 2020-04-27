@@ -143,7 +143,7 @@ void generateCuboid(vec3d center, vec3d halfDiagonal, vec3d* OUTpts, triangle* O
 	Outmesh[6].pts[2] = OUTpts + 3;
 
 	Outmesh[7].pts[0] = OUTpts + 7;
-	Outmesh[7].pts[1] = OUTpts + 4;
+	Outmesh[7].pts[1] = OUTpts + 3;
 	Outmesh[7].pts[2] = OUTpts + 6;
 
 	//YZ left
@@ -152,8 +152,8 @@ void generateCuboid(vec3d center, vec3d halfDiagonal, vec3d* OUTpts, triangle* O
 	Outmesh[8].pts[2] = OUTpts + 2;
 
 	Outmesh[9].pts[0] = OUTpts + 6;
-	Outmesh[9].pts[1] = OUTpts + 4;
-	Outmesh[9].pts[2] = OUTpts + 2;
+	Outmesh[9].pts[1] = OUTpts + 2;
+	Outmesh[9].pts[2] = OUTpts + 4;
 
 	//YZ right
 	Outmesh[10].pts[0] = OUTpts + 1;

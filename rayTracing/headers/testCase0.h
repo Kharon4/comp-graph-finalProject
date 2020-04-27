@@ -8,9 +8,9 @@ vector<directionalLight> dL;
 
 //scene specific
 
-#define lightBounces 1
-#define defaultSphereNoArcs 15
-#define defaultSphereArcRez 15
+#define lightBounces 3
+#define defaultSphereNoArcs 50
+#define defaultSphereArcRez 50
 
 void initLights() {
 

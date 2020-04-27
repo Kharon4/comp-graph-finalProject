@@ -74,5 +74,8 @@
     <ClInclude Include="headers\testCase1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\testCase2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
