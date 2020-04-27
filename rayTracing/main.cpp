@@ -4,7 +4,7 @@
 
 #include "win32WindowingSystem.h"
 
-#include "testCase0.h"
+#include "testCase1.h"
 
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow) {
@@ -28,7 +28,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	generateScene(Mesh, pts);
 	collTriangle* cTrs = initMesh(Mesh, getNoFaces());
 	
-	render(c, Mesh, cTrs, getNoFaces(),pL,dL, w1.data);
+	render(c, Mesh, cTrs, getNoFaces(),pL,dL,lightBounces, w1.data);
 	w1.draw();
 	
 	delete[] Mesh;

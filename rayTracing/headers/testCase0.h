@@ -1,6 +1,6 @@
 #pragma once
-#include "rayTrace.h"
 
+#include "rayTrace.h"
 #include "primitives.h"
 
 vector<pointLight> pL;
@@ -8,15 +8,11 @@ vector<directionalLight> dL;
 
 //scene specific
 
+#define lightBounces 1
 #define defaultSphereNoArcs 15
 #define defaultSphereArcRez 15
 
 void initLights() {
-	//global dir light
-	directionalLight dl;
-	dl.color = vec3f(0.75, 0.75, 0.75);
-	dl.dir = vec3d(0, 1, 0);
-	//dL.push_back(dl);
 
 	//point light
 	pointLight pl;
