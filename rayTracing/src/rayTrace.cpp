@@ -153,12 +153,12 @@ void convertToByteColor(float min, float max, vec3f color, BYTE* OUTColor) {
 	OUTColor[0] = color.z;//b
 }
 
-void render(camera c, triangle* trs, collTriangle* collTrs, long long noTrs, const vector<pointLight>& pLights, const vector<directionalLight>& dLights, BYTE* dataOut){
+void render(camera c, triangle* trs, collTriangle* collTrs, long long noTrs, const vector<pointLight>& pLights, const vector<directionalLight>& dLights,unsigned char iterations , BYTE* dataOut){
 	double max = 0;
 	vec3f* colorData = new vec3f[c.xRes * c.yRes];
 	for (short y = 0; y < c.yRes; ++y) {
 		for (short x = 0; x < c.xRes; ++x) {
-			vec3f col = rayTrace(getRay(c, x, y), trs, collTrs, noTrs,pLights,dLights);
+			vec3f col = rayTrace(getRay(c, x, y), trs, collTrs, noTrs,pLights,dLights,iterations);
 			if (col.x > max)max = col.x;
 			if (col.y > max)max = col.y;
 			if (col.z > max)max = col.z;

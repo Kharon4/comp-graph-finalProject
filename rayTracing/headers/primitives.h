@@ -88,3 +88,80 @@ void generateSphere(vec3d center, double rad, unsigned char halfArcRes, unsigned
 	}
 
 }
+
+#define cuboidVertexNo 8
+#define cuboidTriangleNo 12
+
+void generateCuboid(vec3d center, vec3d halfDiagonal, vec3d* OUTpts, triangle* Outmesh, triangle shadingProperties) {
+	//create pts
+	OUTpts[0] = center - halfDiagonal;//lower left
+	for (unsigned char i = 1; i < 8; ++i)OUTpts[i] = OUTpts[0];
+	halfDiagonal *= 2;
+	OUTpts[1].x += halfDiagonal.x;
+	OUTpts[2].y += halfDiagonal.y;
+	OUTpts[3].x += halfDiagonal.x;
+	OUTpts[3].y += halfDiagonal.y;
+
+	for (unsigned char i = 4; i < 8; ++i)OUTpts[i].z += halfDiagonal.z;
+	OUTpts[5].x += halfDiagonal.x;
+	OUTpts[6].y += halfDiagonal.y;
+	OUTpts[7].x += halfDiagonal.x;
+	OUTpts[7].y += halfDiagonal.y;
+
+	for (unsigned char i = 0; i < 12; ++i)Outmesh[i] = shadingProperties;
+
+	//XY lower
+	Outmesh[0].pts[0] = OUTpts + 0;
+	Outmesh[0].pts[1] = OUTpts + 2;
+	Outmesh[0].pts[2] = OUTpts + 1;
+
+	Outmesh[1].pts[0] = OUTpts + 3;
+	Outmesh[1].pts[1] = OUTpts + 1;
+	Outmesh[1].pts[2] = OUTpts + 2;
+
+	//XY upper
+	Outmesh[2].pts[0] = OUTpts + 4;
+	Outmesh[2].pts[1] = OUTpts + 5;
+	Outmesh[2].pts[2] = OUTpts + 6;
+
+	Outmesh[3].pts[0] = OUTpts + 7;
+	Outmesh[3].pts[1] = OUTpts + 6;
+	Outmesh[3].pts[2] = OUTpts + 5;
+
+	//XZ front
+	Outmesh[4].pts[0] = OUTpts + 0;
+	Outmesh[4].pts[1] = OUTpts + 1;
+	Outmesh[4].pts[2] = OUTpts + 4;
+
+	Outmesh[5].pts[0] = OUTpts + 5;
+	Outmesh[5].pts[1] = OUTpts + 4;
+	Outmesh[5].pts[2] = OUTpts + 1;
+
+	//XZ back
+	Outmesh[6].pts[0] = OUTpts + 2;
+	Outmesh[6].pts[1] = OUTpts + 6;
+	Outmesh[6].pts[2] = OUTpts + 3;
+
+	Outmesh[7].pts[0] = OUTpts + 7;
+	Outmesh[7].pts[1] = OUTpts + 4;
+	Outmesh[7].pts[2] = OUTpts + 6;
+
+	//YZ left
+	Outmesh[8].pts[0] = OUTpts + 0;
+	Outmesh[8].pts[1] = OUTpts + 4;
+	Outmesh[8].pts[2] = OUTpts + 2;
+
+	Outmesh[9].pts[0] = OUTpts + 6;
+	Outmesh[9].pts[1] = OUTpts + 4;
+	Outmesh[9].pts[2] = OUTpts + 2;
+
+	//YZ right
+	Outmesh[10].pts[0] = OUTpts + 1;
+	Outmesh[10].pts[1] = OUTpts + 3;
+	Outmesh[10].pts[2] = OUTpts + 5;
+
+	Outmesh[11].pts[0] = OUTpts + 7;
+	Outmesh[11].pts[1] = OUTpts + 5;
+	Outmesh[11].pts[2] = OUTpts + 3;
+
+}
