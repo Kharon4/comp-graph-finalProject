@@ -62,14 +62,16 @@ vec3f rayTrace(linearMathD::line ray, triangle* trs, collTriangle* collTrs, long
 		linearMathD::line lightRay;
 		lightRay.setPT(collPt - ray.getDr() * clearanceFactor);
 		lightRay.setDR(pLights[i].pos - collPt);
-		if (vec3d::dot(lightRay.getDr(), collTrs[id].collPlane.getDr()) <= 0)continue;
-		
+		double factor = vec3d::dot(lightRay.getDr(), collTrs[id].collPlane.getDr());
+		if (factor <= 0)continue;
+		factor /= collTrs[id].collPlane.getDr().mag();
+		factor /= lDistance;
 		double minDist;
 		getClosestIntersection(lightRay, collTrs, noTrs, nullptr, &minDist);
 		if (minDist * minDist < lDistance && minDist>=0)continue;
-		finalColor.x += trs[id].diffuseRefelctivity.x * pLights[i].color.x / lDistance;
-		finalColor.y += trs[id].diffuseRefelctivity.y * pLights[i].color.y / lDistance;
-		finalColor.z += trs[id].diffuseRefelctivity.z * pLights[i].color.z / lDistance;
+		finalColor.x += trs[id].diffuseRefelctivity.x * pLights[i].color.x * factor;
+		finalColor.y += trs[id].diffuseRefelctivity.y * pLights[i].color.y * factor;
+		finalColor.z += trs[id].diffuseRefelctivity.z * pLights[i].color.z * factor;
 	}
 
 	//dir light
