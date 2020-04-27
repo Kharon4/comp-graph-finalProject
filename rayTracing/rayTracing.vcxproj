@@ -175,6 +175,7 @@
     <ClInclude Include="headers\light.h" />
     <ClInclude Include="headers\mesh.h" />
     <ClInclude Include="headers\models.hpp" />
+    <ClInclude Include="headers\primitives.h" />
     <ClInclude Include="headers\rayTrace.h" />
     <ClInclude Include="headers\testCase0.h" />
     <ClInclude Include="includes\math3D\linearMath.h" />
