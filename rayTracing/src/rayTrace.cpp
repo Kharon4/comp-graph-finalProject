@@ -1,5 +1,8 @@
 #include "rayTrace.h"
 
+
+using std::vector;
+
 #define defaultColor vec3f(64, 64, 64)
 #define clearanceFactor 0.001
 

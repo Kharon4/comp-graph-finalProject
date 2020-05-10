@@ -1,3 +1,8 @@
+/**
+ * @file light.h
+ * @brief Defines different types of light classes.
+ */
+
 #pragma once
 #include "vec3.h"
 

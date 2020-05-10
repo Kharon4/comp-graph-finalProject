@@ -1,3 +1,10 @@
+/**
+ * @file primitives.h
+ * @brief Exports functions for generating vertices and triangles to form primitives.
+ */
+
+
+
 #pragma once
 #include <vec3.h>
 #include <math.h>
@@ -7,7 +14,16 @@
 #define vertexNo(arcRes , noArcs) ((arcRes-2)*noArcs + 2)
 #define triangleNo(arcRes , noArcs) ((arcRes-3)*noArcs*2 + 2*noArcs)
 
-
+ /**
+ * Populates vertex array and triangle array for generating a sphere.
+ * @param ceneter The center of the sphere.
+ * @param rad Radius of the sphere.
+ * @param halfArcRes No of vertices per longitude.
+ * @param halfArcs No of longitudes.
+ * @param OUTpts Point array to be populated.
+ * @param OUTmesh Triangle array to be populated.
+ * @param shadingProperties Defines the shaders used for shading the sphere.
+ */
 void generateSphere(vec3d center, double rad, unsigned char halfArcRes, unsigned char halfArcs, vec3d* OUTpts, triangle* OUTmesh, triangle shadingProperties) {
 	//generate all arcs
 	for (unsigned char arcNo = 0; arcNo < halfArcs; ++arcNo) {
@@ -92,6 +108,14 @@ void generateSphere(vec3d center, double rad, unsigned char halfArcRes, unsigned
 #define cuboidVertexNo 8
 #define cuboidTriangleNo 12
 
+/**
+* Populates vertex array and triangle array for generating a cuboid.
+* @param ceneter The center of the cuboid.
+* @param halfDiagonal A vector from center to one of the corner of the cuboid.
+* @param OUTpts Point array to be populated.
+* @param OUTmesh Triangle array to be populated.
+* @param shadingProperties Defines the shaders used for shading the cuboid.
+*/
 void generateCuboid(vec3d center, vec3d halfDiagonal, vec3d* OUTpts, triangle* Outmesh, triangle shadingProperties) {
 	//create pts
 	OUTpts[0] = center - halfDiagonal;//lower left

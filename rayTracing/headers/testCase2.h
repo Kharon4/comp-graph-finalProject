@@ -1,11 +1,15 @@
-#pragma once
+/**
+ * @file testCase2.h
+ * @brief Exports function(s) for generating a scene to showcase refraction and total internal reflection.
+ */
+
 #pragma once
 
 #include "rayTrace.h"
 #include "primitives.h"
 
-vector<pointLight> pL;
-vector<directionalLight> dL;
+std::vector<pointLight> pL;
+std::vector<directionalLight> dL;
 
 //scene specific
 
@@ -13,6 +17,11 @@ vector<directionalLight> dL;
 #define defaultSphereNoArcs 25
 #define defaultSphereArcRez 25
 
+
+
+ /**
+ * Initializes scene lights.
+ */
 void initLights() {
 	//global dir light
 	directionalLight dl;
@@ -30,6 +39,11 @@ void initLights() {
 	//pL.push_back(pl);
 }
 
+
+/**
+* Returns the no of vertices in the scene.
+* @return No of vertices in the scene.
+*/
 unsigned int getNoVertices() {
 	unsigned int rVal = 0;
 	//base plane
@@ -44,6 +58,11 @@ unsigned int getNoVertices() {
 	return rVal;
 }
 
+
+/**
+* Returns the no of triangles in the scene.
+* @return No of triangles in the scene.
+*/
 unsigned int getNoFaces() {
 	unsigned int rVal = 0;
 	//base plane
@@ -58,6 +77,13 @@ unsigned int getNoFaces() {
 	return rVal;
 }
 
+
+
+/**
+* Populates point and triangle arrays to generate the scene.
+* @param trs The triangle array.
+* @param pts The point array.
+*/
 void generateScene(triangle* trs, vec3d* pts) {
 
 

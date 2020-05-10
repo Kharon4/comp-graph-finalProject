@@ -3,7 +3,6 @@
 #define math3D_DeclrationOnly 1
 
 #include "win32WindowingSystem.h"
-
 #include "testCase1.h"
 
 
