@@ -21,7 +21,7 @@
  * @param halfArcs No of longitudes.
  * @param OUTpts Point array to be populated.
  * @param OUTmesh Triangle array to be populated.
- * @param shadingProperties Defines the shaders used for shading the sphere.
+ * @param shadingProperties Defines the shading of the sphere.
  */
 void generateSphere(vec3d center, double rad, unsigned char halfArcRes, unsigned char halfArcs, vec3d* OUTpts, triangle* OUTmesh, triangle shadingProperties) {
 	//generate all arcs
@@ -113,7 +113,7 @@ void generateSphere(vec3d center, double rad, unsigned char halfArcRes, unsigned
 * @param halfDiagonal A vector from center to one of the corner of the cuboid.
 * @param OUTpts Point array to be populated.
 * @param OUTmesh Triangle array to be populated.
-* @param shadingProperties Defines the shaders used for shading the cuboid.
+* @param shadingProperties Defines the shading of the cuboid.
 */
 void generateCuboid(vec3d center, vec3d halfDiagonal, vec3d* OUTpts, triangle* Outmesh, triangle shadingProperties) {
 	//create pts
