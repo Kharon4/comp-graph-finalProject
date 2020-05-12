@@ -1,0 +1,11 @@
+digraph "includeSRC/math3D" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_f56aa5241ac97d7fbedf5924ebaa50a6 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="includeSRC" fontname="Helvetica", fontsize="10", URL="dir_f56aa5241ac97d7fbedf5924ebaa50a6.html"]
+  dir_db028421daa26ac3bdfd6ef5f25bd842 [shape=box, label="math3D", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_db028421daa26ac3bdfd6ef5f25bd842.html"];
+  }
+  dir_09e761304027c904456130627fd4dcf5 [shape=box label="includes" fillcolor="white" style="filled" color="red" URL="dir_09e761304027c904456130627fd4dcf5.html"];
+  dir_db028421daa26ac3bdfd6ef5f25bd842->dir_09e761304027c904456130627fd4dcf5 [headlabel="3", labeldistance=1.5 headhref="dir_000005_000001.html"];
+}

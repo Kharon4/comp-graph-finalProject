@@ -1,0 +1,3 @@
+# Ray Tracing - Abstract
+
+The project implements backwards ray tracing i.e the projector rays are casted from the camera and then checked for intersections with the mesh in the scene. If such intersections are obtained, the closest one is chosen to be the real intersection that would have occured between a light ray and the mesh. Based on the surface properties of the mesh new rays are generated, emanating from the point of intersection of the original ray and the mesh. These newly generated rays are then used as reflected or refracted rays, or to evaluate the lighting at the intersection point.
